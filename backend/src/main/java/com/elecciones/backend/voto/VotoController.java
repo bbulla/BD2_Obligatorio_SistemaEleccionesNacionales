@@ -1,5 +1,6 @@
 package com.elecciones.backend.voto;
 
+import com.elecciones.backend.voto.reportes.GanadorEleccionDTO;
 import com.elecciones.backend.voto.reportes.VotosPorListaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +34,9 @@ public class VotoController {
         return votoService.obtenerVotosPorListaEnCircuito(idCircuito, idEstablecimiento);
     }
 
+    @GetMapping("/reportes/eleccion/{id}/ganador")
+    public GanadorEleccionDTO ganadorPorEleccion(@PathVariable int id) {
+        return votoService.obtenerGanadorPorEleccion(id);
+    }
 
 }

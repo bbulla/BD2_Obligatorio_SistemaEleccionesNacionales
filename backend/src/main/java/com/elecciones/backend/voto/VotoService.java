@@ -3,6 +3,7 @@ package com.elecciones.backend.voto;
 import com.elecciones.backend.voto.exceptions.CircuitoCerradoException;
 import com.elecciones.backend.voto.exceptions.NoHabilitadoException;
 import com.elecciones.backend.voto.exceptions.YaVotoException;
+import com.elecciones.backend.voto.reportes.GanadorEleccionDTO;
 import com.elecciones.backend.voto.reportes.VotosPorListaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -117,5 +118,37 @@ public class VotoService {
                 rs.getInt("total_votos")
         ), idCircuito, idEstablecimiento);
     }
+
+    public GanadorEleccionDTO obtenerGanadorPorEleccion(int idEleccion) {
+        String sql = """
+        SELECT
+            l.id AS id_lista,
+            l.lema AS nombre_lista,
+            p.descripcion AS nombre_partido,
+            COUNT(*) AS total_votos
+        FROM
+            VOTO v
+        JOIN VOTO_LISTA vl ON v.id = vl.id_voto
+        JOIN LISTA l ON vl.id_lista = l.id
+        JOIN PARTIDO p ON l.id_partido = p.id
+        WHERE
+            v.id_eleccion = ?
+            AND v.tipo = 'Válido'
+            AND v.es_observado = 0
+        GROUP BY
+            l.id, l.lema, p.descripcion
+        ORDER BY
+            total_votos DESC
+        LIMIT 1
+        """;
+
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new GanadorEleccionDTO(
+                rs.getInt("id_lista"),
+                rs.getString("nombre_lista"),
+                rs.getString("nombre_partido"),
+                rs.getInt("total_votos")
+        ), idEleccion);
+    }
+
 
 }
