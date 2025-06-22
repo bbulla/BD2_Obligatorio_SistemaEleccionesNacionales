@@ -17,23 +17,33 @@ public class HabilitadoRepository {
     private JdbcTemplate jdbcTemplate;
 
     public List<Habilitado> findAll() {
-        String sql = "SELECT CC, CI, nombres, apellidos, f_nacimiento, fecha_voto, posicion, id_circuito, id_partido FROM HABILITADO";
+        String sql = "SELECT cc, ci, nombres, apellidos, f_nacimiento, id_circuito FROM HABILITADO";
 
         return jdbcTemplate.query(sql, new RowMapper<Habilitado>() {
             @Override
             public Habilitado mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Habilitado(
-                        rs.getString("CC"),
-                        rs.getString("CI"),
+                        rs.getString("cc"),
+                        rs.getString("ci"),
                         rs.getString("nombres"),
                         rs.getString("apellidos"),
                         rs.getObject("f_nacimiento", LocalDate.class),
-                        rs.getObject("fecha_voto", LocalDate.class),
-                        (Integer) rs.getObject("posicion"),
-                        rs.getInt("id_circuito"),
-                        rs.getInt("id_partido")
+                        rs.getInt("id_circuito")
                 );
             }
         });
+    }
+
+    public Habilitado findByCc(String cc) {
+        String sql = "SELECT cc, ci, nombres, apellidos, f_nacimiento, id_circuito FROM HABILITADO WHERE cc = ?";
+        List<Habilitado> result = jdbcTemplate.query(sql, new Object[]{cc}, (rs, rowNum) -> new Habilitado(
+                rs.getString("cc"),
+                rs.getString("ci"),
+                rs.getString("nombres"),
+                rs.getString("apellidos"),
+                rs.getDate("f_nacimiento").toLocalDate(),
+                rs.getInt("id_circuito")
+        ));
+        return result.isEmpty() ? null : result.get(0);
     }
 }

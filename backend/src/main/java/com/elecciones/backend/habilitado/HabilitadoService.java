@@ -14,4 +14,8 @@ public class HabilitadoService {
     public List<Habilitado> getAllHabilitados() {
         return habilitadoRepository.findAll();
     }
+
+    public Habilitado getByCc(String cc) {
+        return habilitadoRepository.findByCc(cc);
+    }
 }

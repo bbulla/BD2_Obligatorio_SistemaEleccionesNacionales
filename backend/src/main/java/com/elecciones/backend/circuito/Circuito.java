@@ -1,25 +1,18 @@
 package com.elecciones.backend.circuito;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class Circuito {
     private int id;
     private int idEstablecimiento;
     private boolean esAccesible;
-    private LocalDate fecha;
-    private LocalTime hora;
-    private String descripcion;
+    private boolean cerrado;
 
     public Circuito() {}
 
-    public Circuito(int id, int idEstablecimiento, boolean esAccesible, LocalDate fecha, LocalTime hora, String descripcion) {
+    public Circuito(int id, int idEstablecimiento, boolean esAccesible, boolean cerrado) {
         this.id = id;
         this.idEstablecimiento = idEstablecimiento;
         this.esAccesible = esAccesible;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.descripcion = descripcion;
+        this.cerrado = cerrado;
     }
 
     public int getId() { return id; }
@@ -31,12 +24,6 @@ public class Circuito {
     public boolean isEsAccesible() { return esAccesible; }
     public void setEsAccesible(boolean esAccesible) { this.esAccesible = esAccesible; }
 
-    public LocalDate getFecha() { return fecha; }
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
-
-    public LocalTime getHora() { return hora; }
-    public void setHora(LocalTime hora) { this.hora = hora; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public boolean isCerrado() { return cerrado; }
+    public void setCerrado(boolean cerrado) { this.cerrado = cerrado; }
 }
