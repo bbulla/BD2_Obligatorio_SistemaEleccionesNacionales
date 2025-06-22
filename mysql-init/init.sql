@@ -4,20 +4,20 @@
 -- =========================
 
 CREATE TABLE ELECCION (
-                          id INT PRIMARY KEY,
+                          id INT AUTO_INCREMENT PRIMARY KEY,
                           tipo VARCHAR(50),
                           fecha DATE,
                           descripcion VARCHAR(255)
 );
 
 CREATE TABLE PARTIDO (
-                         id INT PRIMARY KEY,
+                         id INT AUTO_INCREMENT PRIMARY KEY,
                          descripcion VARCHAR(100),
                          direccion VARCHAR(100)
 );
 
 CREATE TABLE LISTA (
-                       id INT PRIMARY KEY,
+                       id INT AUTO_INCREMENT PRIMARY KEY,
                        lema VARCHAR(100),
                        nro_lista INT,
                        id_eleccion INT,
@@ -27,19 +27,19 @@ CREATE TABLE LISTA (
 );
 
 CREATE TABLE DEPARTAMENTO (
-                              id INT PRIMARY KEY,
+                              id INT AUTO_INCREMENT PRIMARY KEY,
                               nombre VARCHAR(100)
 );
 
 CREATE TABLE LOCALIDAD (
-                           id INT PRIMARY KEY,
+                           id INT AUTO_INCREMENT PRIMARY KEY,
                            nombre VARCHAR(100),
                            id_departamento INT,
                            FOREIGN KEY (id_departamento) REFERENCES DEPARTAMENTO(id)
 );
 
 CREATE TABLE COMISARIA (
-                           id INT PRIMARY KEY,
+                           id INT AUTO_INCREMENT PRIMARY KEY,
                            nombre VARCHAR(100),
                            direccion VARCHAR(100),
                            calle VARCHAR(100),
@@ -47,7 +47,7 @@ CREATE TABLE COMISARIA (
 );
 
 CREATE TABLE ESTABLECIMIENTO (
-                                 id INT PRIMARY KEY,
+                                 id INT AUTO_INCREMENT PRIMARY KEY,
                                  nombre VARCHAR(100),
                                  tipo VARCHAR(50),
                                  id_localidad INT,
@@ -55,7 +55,7 @@ CREATE TABLE ESTABLECIMIENTO (
 );
 
 CREATE TABLE CIRCUITO (
-                          id INT PRIMARY KEY,
+                          id INT AUTO_INCREMENT PRIMARY KEY,
                           nro_circuito INT,
                           es_accesible BOOLEAN,
                           id_establecimiento INT,
@@ -74,7 +74,7 @@ CREATE TABLE HABILITADO (
 );
 
 CREATE TABLE PAPELETA (
-                          id INT PRIMARY KEY,
+                          id INT AUTO_INCREMENT PRIMARY KEY,
                           descripcion VARCHAR(255),
                           id_eleccion INT,
                           FOREIGN KEY (id_eleccion) REFERENCES ELECCION(id)
