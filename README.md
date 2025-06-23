@@ -8,9 +8,9 @@ Sistema completo para la gestión y simulación de una elección nacional. Inclu
 
 BD2\_Obligatorio\_SistemaEleccionesNacionales/
 
-backend/               # Proyecto Java Spring Boot
+backend/               (Proyecto Java Spring Boot)
 
-frontend/              # Proyecto React (Vite)
+frontend/              (Proyecto React (Vite))
 
 mysql-init
 
