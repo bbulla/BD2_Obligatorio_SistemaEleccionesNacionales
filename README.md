@@ -37,20 +37,7 @@ Desde tu cliente o terminal MySQL ejecutar init.sql que se encuentra dentro de l
 
 Carpeta: `backend/`
 
-### 2. Configuración
-
-Archivo: `src/main/resources/application.properties`
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/elecciones
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_contraseña
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.jpa.hibernate.ddl-auto=none
-spring.jpa.show-sql=true
-```
-
-### 3. Ejecutar
+### 2. Ejecutar
 
 Desde IntelliJ o terminal:
 
