@@ -10,6 +10,10 @@ export default function Votar() {
     const [tipo, setTipo] = useState("Válido");
     const [idLista, setIdLista] = useState("");
     const [mensaje, setMensaje] = useState("");
+    const [pin, setPin] = useState("");
+    const [pinValido, setPinValido] = useState(false);
+    const [errorPin, setErrorPin] = useState("");
+
     const { circuito, eleccion } = useCircuito();
 
     useEffect(() => {
@@ -70,42 +74,94 @@ export default function Votar() {
                         <p><strong>Voto observado:</strong> {votante.esObservado ? "Sí" : "No"}</p>
                     </div>
 
-                    <form onSubmit={handleSubmit}>
-                        <div className="field">
-                            <label className="label">Tipo de voto:</label>
-                            <div className="control">
-                                <div className="select is-fullwidth">
-                                    <select value={tipo} onChange={(e) => setTipo(e.target.value)} required>
-                                        <option value="Válido">Válido</option>
-                                        <option value="Blanco">Blanco</option>
-                                        <option value="Anulado">Anulado</option>
-                                    </select>
+                    {/* Verificación PIN para votos observados */}
+                    {votante.esObservado && !pinValido && (
+                        <div className="box">
+                            <h3 className="subtitle has-text-centered has-text-warning">Voto observado</h3>
+                            <p className="has-text-centered mb-3">Este votante está en un circuito distinto al asignado.
+                                Se requiere autorización del presidente de mesa.</p>
+
+                            <div className="field">
+                                <label className="label">PIN del presidente de mesa:</label>
+                                <div className="control">
+                                    <input
+                                        type="password"
+                                        className="input"
+                                        value={pin}
+                                        onChange={(e) => setPin(e.target.value)}
+                                    />
                                 </div>
                             </div>
-                        </div>
 
-                        {tipo === "Válido" && (
+                            {errorPin && (
+                                <p className="has-text-danger has-text-centered">{errorPin}</p>
+                            )}
+
+                            <div className="field has-text-centered">
+                                <button
+                                    className="button is-warning"
+                                    onClick={() => {
+                                        if (pin === "1234") {
+                                            setPinValido(true);
+                                            setErrorPin("");
+                                        } else {
+                                            setErrorPin("PIN incorrecto. Intente nuevamente.");
+                                        }
+                                    }}
+                                >
+                                    Validar PIN
+                                </button>
+
+                                <button
+                                    className="button is-light mt-2"
+                                    onClick={() => navigate("/")}
+                                >
+                                    Cancelar y volver al inicio
+                                </button>
+                            </div>
+
+                        </div>
+                    )}
+
+                    {/* Formulario de votación solo si el PIN fue validado o no es observado */}
+                    {(!votante.esObservado || pinValido) && (
+                        <form onSubmit={handleSubmit}>
                             <div className="field">
-                                <label className="label">Lista:</label>
+                                <label className="label">Tipo de voto:</label>
                                 <div className="control">
                                     <div className="select is-fullwidth">
-                                        <select value={idLista} onChange={(e) => setIdLista(e.target.value)} required>
-                                            <option value="">Seleccione una lista</option>
-                                            {listas.map((l) => (
-                                                <option key={l.id} value={l.id}>
-                                                    {l.nro_lista} - {l.lema}
-                                                </option>
-                                            ))}
+                                    <select value={tipo} onChange={(e) => setTipo(e.target.value)} required>
+                                            <option value="Válido">Válido</option>
+                                            <option value="Blanco">Blanco</option>
+                                            <option value="Anulado">Anulado</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                        )}
 
-                        <div className="field has-text-centered">
-                            <button className="button is-link is-fullwidth">Registrar voto</button>
-                        </div>
-                    </form>
+                            {tipo === "Válido" && (
+                                <div className="field">
+                                    <label className="label">Lista:</label>
+                                    <div className="control">
+                                        <div className="select is-fullwidth">
+                                            <select value={idLista} onChange={(e) => setIdLista(e.target.value)} required>
+                                                <option value="">Seleccione una lista</option>
+                                                {listas.map((l) => (
+                                                    <option key={l.id} value={l.id}>
+                                                        {l.nro_lista} - {l.lema}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="field has-text-centered">
+                                <button className="button is-link is-fullwidth">Registrar voto</button>
+                            </div>
+                        </form>
+                    )}
 
                     {mensaje && (
                         <div className="notification mt-4 is-light has-text-centered">

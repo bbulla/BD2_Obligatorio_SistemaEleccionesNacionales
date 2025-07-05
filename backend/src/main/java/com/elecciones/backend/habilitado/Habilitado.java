@@ -41,3 +41,4 @@ public class Habilitado {
     public void setIdCircuito(int idCircuito) { this.idCircuito = idCircuito; }
 
 }
+

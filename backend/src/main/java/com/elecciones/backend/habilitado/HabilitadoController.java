@@ -26,4 +26,14 @@ public class HabilitadoController {
         }
         return ResponseEntity.ok(habilitado);
     }
+    @PostMapping("/login")
+    public ResponseEntity<Habilitado> login(@RequestBody LoginRequest loginRequest) {
+        Habilitado habilitado = habilitadoService.getByCc(loginRequest.getCc());
+
+        if (habilitado == null || !habilitado.getCi().equals(loginRequest.getCi())) {
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+
+        return ResponseEntity.ok(habilitado);
+    }
 }
