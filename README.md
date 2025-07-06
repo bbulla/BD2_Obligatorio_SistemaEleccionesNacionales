@@ -29,7 +29,7 @@ mysql-init
 
 ### 2. Ejecutar el script
 
-Desde tu cliente o terminal MySQL ejecutar init.sql que se encuentra dentro de la carpeta mysql-init
+Ejecutar init.sql que se encuentra dentro de la carpeta mysql-init
 
 ## Backend (Spring Boot)
 
