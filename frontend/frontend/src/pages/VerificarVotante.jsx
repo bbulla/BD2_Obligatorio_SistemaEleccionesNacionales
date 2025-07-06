@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCircuito } from "../context/CircuitoContext";
-import { getHabilitadoPorCC } from "../services/votoService";
 
 export default function VerificarVotante() {
     const { circuito } = useCircuito();
     const [cc, setCc] = useState("");
+    const [ci, setCi] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError("");
 
         try {
-            const habilitado = await getHabilitadoPorCC(cc);
+            const response = await fetch("http://localhost:8080/api/habilitados/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cc, ci })
+            });
 
-            if (!habilitado) {
-                setError("La credencial ingresada no corresponde a ningún habilitado.");
-                return;
+            if (!response.ok) {
+                throw new Error("Credenciales inválidas");
             }
+
+            const habilitado = await response.json();
 
             const esObservado = String(habilitado.idCircuito) !== String(circuito);
 
@@ -31,13 +37,8 @@ export default function VerificarVotante() {
 
             navigate("/votar");
         } catch (err) {
-            console.error("Error al verificar CC:", err);
-
-            if (err.response?.status === 404) {
-                setError("La credencial ingresada no corresponde a ningún habilitado.");
-            } else {
-                setError("Ocurrió un error al verificar la credencial.");
-            }
+            console.error("Error al verificar login:", err);
+            setError("Credencial o contraseña inválida");
         }
     };
 
@@ -56,6 +57,19 @@ export default function VerificarVotante() {
                                     type="text"
                                     value={cc}
                                     onChange={(e) => setCc(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="field">
+                            <label className="label">Contraseña:</label>
+                            <div className="control">
+                                <input
+                                    className="input"
+                                    type="password"
+                                    value={ci}
+                                    onChange={(e) => setCi(e.target.value)}
                                     required
                                 />
                             </div>
