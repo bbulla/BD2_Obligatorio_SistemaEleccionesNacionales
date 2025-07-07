@@ -53,6 +53,19 @@ export default function Votar() {
                 errorMsg.includes("El circuito ya fue cerrado")
             ) {
                 setMensaje("⛔ No se puede registrar el voto porque la mesa está cerrada.");
+            } else if (errorMsg === "Este ciudadano ya emitió su voto en esta elección.") {
+                sessionStorage.removeItem("votante");
+                setMensaje(
+                    <div className="has-text-centered">
+                        <p>⛔ Este ciudadano ya emitió su voto en esta elección.</p>
+                        <button
+                            className="button is-light mt-3"
+                            onClick={() => navigate("/menu")}
+                        >
+                            Volver al menú principal
+                        </button>
+                    </div>
+                );
             } else {
                 setMensaje("❌ Error al registrar el voto.");
             }
@@ -78,8 +91,10 @@ export default function Votar() {
                     {votante.esObservado && !pinValido && (
                         <div className="box">
                             <h3 className="subtitle has-text-centered has-text-warning">Voto observado</h3>
-                            <p className="has-text-centered mb-3">Este votante está en un circuito distinto al asignado.
-                                Se requiere autorización del presidente de mesa.</p>
+                            <p className="has-text-centered mb-3">
+                                Este votante está en un circuito distinto al asignado.
+                                Se requiere autorización del presidente de mesa.
+                            </p>
 
                             <div className="field">
                                 <label className="label">PIN del presidente de mesa:</label>
@@ -97,27 +112,30 @@ export default function Votar() {
                                 <p className="has-text-danger has-text-centered">{errorPin}</p>
                             )}
 
-                            <div className="field has-text-centered">
-                                <button
-                                    className="button is-warning"
-                                    onClick={() => {
-                                        if (pin === "1234") {
-                                            setPinValido(true);
-                                            setErrorPin("");
-                                        } else {
-                                            setErrorPin("PIN incorrecto. Intente nuevamente.");
-                                        }
-                                    }}
-                                >
-                                    Validar PIN
-                                </button>
-
-                                <button
-                                    className="button is-light mt-2"
-                                    onClick={() => navigate("/")}
-                                >
-                                    Cancelar y volver al inicio
-                                </button>
+                            <div className="field is-grouped is-justify-content-center mt-4">
+                                <p className="control">
+                                    <button
+                                        className="button is-warning"
+                                        onClick={() => {
+                                            if (pin === "1234") {
+                                                setPinValido(true);
+                                                setErrorPin("");
+                                            } else {
+                                                setErrorPin("PIN incorrecto. Intente nuevamente.");
+                                            }
+                                        }}
+                                    >
+                                        Validar PIN
+                                    </button>
+                                </p>
+                                <p className="control">
+                                    <button
+                                        className="button is-light"
+                                        onClick={() => navigate("/")}
+                                    >
+                                        Cancelar y volver al inicio
+                                    </button>
+                                </p>
                             </div>
 
                         </div>
@@ -130,7 +148,7 @@ export default function Votar() {
                                 <label className="label">Tipo de voto:</label>
                                 <div className="control">
                                     <div className="select is-fullwidth">
-                                    <select value={tipo} onChange={(e) => setTipo(e.target.value)} required>
+                                        <select value={tipo} onChange={(e) => setTipo(e.target.value)} required>
                                             <option value="Válido">Válido</option>
                                             <option value="Blanco">Blanco</option>
                                             <option value="Anulado">Anulado</option>
